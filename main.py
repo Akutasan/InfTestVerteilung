@@ -8,9 +8,12 @@ load_dotenv()
 NAME = os.getenv('NAME')
 PASS = os.getenv('PASSKEY')
 
+print(NAME, PASS)
+
+
 s = webuntis.Session(
-    username=NAME,
-    password=PASS,
+    username=str(NAME),
+    password=str(PASS),
     server='neilo.webuntis.com',
     school='Wilhelm-Raabe-Schule%20Lueneburg',
     useragent='WebUntis Test'
