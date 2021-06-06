@@ -46,6 +46,8 @@ raumrev = {key: value for (value, key) in raum.items()}
 # Only for Testing
 # for key, value in raum.items():
 #     print(key, ' : ', value)
+# print("Klasse", table.klassen, "hat in der", timetable.get(table.start), "in", table.rooms,
+#       "unterricht.")
 
 # Assign Class ID and Class Name to dictionary 'klass'
 klass = {}
@@ -53,11 +55,23 @@ for f in s.klassen():
     raum[f.name] = f.id
 klassrev = {key: value for (value, key) in raum.items()}
 
-foo = [[], [], []]
+foo = [[], [], [], [], [], [], [], [], [], []]
 klassen = foo[0]
 zeit = foo[1]
 raume = foo[2]
+raumes1 = foo[3]
+raumes2 = foo[4]
+raumes3 = foo[5]
+raumes4 = foo[6]
+zeits1 = foo[7]
+zeits2 = foo[8]
+zeits3 = foo[9]
+zeits4 = foo[10]
+
+
 i = 0
+ya = input("Welcher Wochentag? (Mo/Di)").lower()
+
 with open("data/neededrooms.txt") as idx:
     for f in idx:
         istrip = f.rstrip("\n")
@@ -66,22 +80,69 @@ with open("data/neededrooms.txt") as idx:
         if f == 'stop':
             break
 
-        for table in s.timetable(start=mo, end=mo, room=ida):
-            klassen.append(table.klassen)
-            zeit.append(timetable.get(table.start))
-            raume.append(table.rooms)
-            if table.start >= date(mo.year, mo.month, mo.day, 9, 55):
-                if check(str(raume[i])) == '[R1':
-                    print("Erstes Stockwerk!")
-                if table.rooms.id == 17:
-                    print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-                    continue
-                elif table.start > date(mo.year, mo.month, mo.day, 13, 20):
-                    print("BBBBBBBBBBBBBBBBBB")
-                    continue
-                else:
-                    print("Klasse", table.klassen, "hat in der", timetable.get(table.start), "in", table.rooms,
-                          "unterricht.")
-            i += 1
+        if ya == 'mo':
+            for table in s.timetable(start=mo, end=mo, room=ida):
+                klassen.append(table.klassen)
+                zeit.append(timetable.get(table.start))
+                raume.append(table.rooms)
+                if table.start >= date(mo.year, mo.month, mo.day, 9, 55):
+                    if check(str(raume[i])) == '[R1':
+                        raumes1.append(raume[i])
+                    elif check(str(raume[i])) == '[R2':
+                        raumes2.append(raume[i])
+                    elif check(str(raume[i])) == '[R3':
+                        raumes3.append(raume[i])
+                    else:
+                        raumes4.append(raume[i])
+
+                i += 1
+
+            print('Im ersten Stock sind folgende Räume besetzt:\n')
+            print('[%s]' % ', '.join(map(str, raumes1)))
+
+            print('Im zweiten Stock sind folgende Räume besetzt:')
+            print('[%s]' % ', '.join(map(str, raumes2)))
+
+            print('Im dritten Stock sind folgende Räume besetzt:')
+            print('[%s]' % ', '.join(map(str, raumes3)))
+
+            print('Sontige Räume (Aula, Mensa etc) sind hier bestzt:')
+            print('[%s]' % ', '.join(map(str, raumes4)))
+
+        elif ya == 'di':
+            for table in s.timetable(start=tu, end=tu, room=ida):
+                klassen.append(table.klassen)
+                zeit.append(timetable.get(table.start))
+                raume.append(table.rooms)
+                if table.start >= date(tu.year, tu.month, tu.day, 9, 55):
+                    if check(str(raume[i])) == '[R1':
+                        raumes1.append(raume[i])
+                        zeits1.append(zeit[i])
+                    elif check(str(raume[i])) == '[R2':
+                        raumes2.append(raume[i])
+                        zeits1.append(zeit[i])
+                    elif check(str(raume[i])) == '[R3':
+                        raumes3.append(raume[i])
+                        zeits3.append(zeit[i])
+                    else:
+                        raumes4.append(raume[i])
+                        zeits4.append(zeit[i])
+
+                i += 1
+
+            print('Im ersten Stock sind folgende Räume besetzt:\n')
+            print('[%s]' % ', '.join(map(str, raumes1)), 'in der', ''.join(map(str, zeits1)))
+
+            print('Im zweiten Stock sind folgende Räume besetzt:')
+            print('[%s]' % ', '.join(map(str, raumes2)), 'in der', ''.join(map(str, zeits2)))
+
+            print('Im dritten Stock sind folgende Räume besetzt:')
+            print('[%s]' % ', '.join(map(str, raumes3)), 'in der', ''.join(map(str, zeits3)))
+
+            print('Sontige Räume (Aula, Mensa etc) sind hier bestzt:')
+            print('[%s]' % ', '.join(map(str, raumes4)), 'in der', ''.join(map(str, zeits4)))
+
+        else:
+            print("Kein gültiger Wochentag!")
 
 s.logout()
