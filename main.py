@@ -11,8 +11,8 @@ NAME = os.getenv('NAME')
 PASS = os.getenv('PASSKEY')
 
 s = webuntis.Session(
-    username=str(NAME),
-    password=str(PASS),
+    username='susDEMO',
+    password='!Schule2020',
     server='neilo.webuntis.com',
     school='Wilhelm-Raabe-Schule%20Lueneburg',
     useragent='WebUntis Test'
@@ -55,19 +55,20 @@ for f in s.klassen():
     raum[f.name] = f.id
 klassrev = {key: value for (value, key) in raum.items()}
 
-foo = [[], [], [], [], [], [], [], [], [], []]
+foo = [[], [], [], [], [], [], [], [], [], [], [], [], []]
 klassen = foo[0]
 zeit = foo[1]
+raumes = foo[12]
 raume = foo[2]
 raumes1 = foo[3]
 raumes2 = foo[4]
 raumes3 = foo[5]
 raumes4 = foo[6]
+zeits = foo[11]
 zeits1 = foo[7]
 zeits2 = foo[8]
 zeits3 = foo[9]
 zeits4 = foo[10]
-
 
 i = 0
 ya = input("Welcher Wochentag? (Mo/Di)").lower()
@@ -88,26 +89,19 @@ with open("data/neededrooms.txt") as idx:
                 if table.start >= date(mo.year, mo.month, mo.day, 9, 55):
                     if check(str(raume[i])) == '[R1':
                         raumes1.append(raume[i])
+                        zeits1.append(zeit[i])
                     elif check(str(raume[i])) == '[R2':
                         raumes2.append(raume[i])
+                        zeits2.append(zeit[i])
                     elif check(str(raume[i])) == '[R3':
                         raumes3.append(raume[i])
+                        zeits3.append(zeit[i])
+                    elif check(str(raume[i])) == '[R0':
+                        raumes.append(raume[i])
+                        zeits.append(zeit[i])
                     else:
                         raumes4.append(raume[i])
-
-                i += 1
-
-            print('Im ersten Stock sind folgende Räume besetzt:\n')
-            print('[%s]' % ', '.join(map(str, raumes1)))
-
-            print('Im zweiten Stock sind folgende Räume besetzt:')
-            print('[%s]' % ', '.join(map(str, raumes2)))
-
-            print('Im dritten Stock sind folgende Räume besetzt:')
-            print('[%s]' % ', '.join(map(str, raumes3)))
-
-            print('Sontige Räume (Aula, Mensa etc) sind hier bestzt:')
-            print('[%s]' % ', '.join(map(str, raumes4)))
+                        zeits4.append(zeit[i])
 
         elif ya == 'di':
             for table in s.timetable(start=tu, end=tu, room=ida):
@@ -120,29 +114,51 @@ with open("data/neededrooms.txt") as idx:
                         zeits1.append(zeit[i])
                     elif check(str(raume[i])) == '[R2':
                         raumes2.append(raume[i])
-                        zeits1.append(zeit[i])
+                        zeits2.append(zeit[i])
                     elif check(str(raume[i])) == '[R3':
                         raumes3.append(raume[i])
                         zeits3.append(zeit[i])
+                    elif check(str(raume[i])) == '[R0':
+                        raumes.append(raume[i])
+                        zeits.append(zeit[i])
                     else:
                         raumes4.append(raume[i])
                         zeits4.append(zeit[i])
 
-                i += 1
-
-            print('Im ersten Stock sind folgende Räume besetzt:\n')
-            print('[%s]' % ', '.join(map(str, raumes1)), 'in der', ''.join(map(str, zeits1)))
-
-            print('Im zweiten Stock sind folgende Räume besetzt:')
-            print('[%s]' % ', '.join(map(str, raumes2)), 'in der', ''.join(map(str, zeits2)))
-
-            print('Im dritten Stock sind folgende Räume besetzt:')
-            print('[%s]' % ', '.join(map(str, raumes3)), 'in der', ''.join(map(str, zeits3)))
-
-            print('Sontige Räume (Aula, Mensa etc) sind hier bestzt:')
-            print('[%s]' % ', '.join(map(str, raumes4)), 'in der', ''.join(map(str, zeits4)))
-
         else:
             print("Kein gültiger Wochentag!")
+            break
 
+        i += 1
 s.logout()
+
+if ya == 'mo':
+    print('Im erdgeschoss sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes)), 'in der', ''.join(map(str, zeits)))
+
+    print('Im ersten Stock sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes1)), 'in der', ''.join(map(str, zeits1)))
+
+    print('Im zweiten Stock sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes2)), 'in der', ''.join(map(str, zeits2)))
+
+    print('Im dritten Stock sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes3)), 'in der', ''.join(map(str, zeits3)))
+
+    print('Sontige Räume (Aula, Mensa etc) sind hier bestzt:')
+    print(''.join(map(str, raumes4)), 'in der', ''.join(map(str, zeits4)))
+elif ya == 'di':
+    print('Im erdgeschoss sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes)), 'in der', ''.join(map(str, zeits)))
+
+    print('Im ersten Stock sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes1)), 'in der', ''.join(map(str, zeits1)))
+
+    print('Im zweiten Stock sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes2)), 'in der', ''.join(map(str, zeits2)))
+
+    print('Im dritten Stock sind folgende Räume besetzt:')
+    print(''.join(map(str, raumes3)), 'in der', ''.join(map(str, zeits3)))
+
+    print('Sontige Räume (Aula, Mensa etc) sind hier bestzt:')
+    print(''.join(map(str, raumes4)), 'in der', ''.join(map(str, zeits4)))
